@@ -172,6 +172,84 @@ spring-boot-test-autoconfigure-x.x.x.jar/META-INF/`spring.factories`
 
 
 
+### yaml配置文件
+
+#### 基本语法
+
+> yaml写入对象
+
+```yaml
+student: 
+	name: Tom
+	age: 3
+	
+#以上语句等同于
+student: {
+	name: Tom,
+	age: 3
+}
+```
+
+> yaml写入数组
+
+```yaml
+pets:
+	- cat
+	- dog
+	- pig
+	
+#等同于
+pets: [cat, dog, pig]
+```
+
+
+
+#### yaml可以给实体类赋值
+
+在实体类中使用注解 `@ConfigurationProperties` 可以指定赋值
+
+> 实例
+
+- yaml.xml
+
+```yaml
+ #自动赋值
+ person:
+  name: "Tony"
+  age: ${random.int}  #随机生成数字
+  happy: false
+  birth: 2020/12/28
+  maps: {k1: v1, k2: v2}
+  hello: happy
+  lists:
+    - code
+    - music
+    - girls
+  dog:
+    name: ${person.hello:hello}_旺财  #类似于三目运算符
+    age: 4
+```
+
+- 对应的实体类
+
+```java
+@Component
+@ConfigurationProperties(prefix = "person")     //绑定yaml文件中注入的值
+public class Person {
+    private String name;
+    private Integer age;
+    private Boolean happy;
+    private Date birth;
+    private Map<String, Object> maps;
+    private List<Object> lists;
+    private Dog dog;
+    
+    /*getter and setter*/
+}
+```
+
+
+
 ## springboot常用注解
 
 #### @RestController
@@ -196,6 +274,20 @@ public class HelloController {
     }
 }
 ```
+
+#### @ConfigurationProperties(prefix = "key") 
+
+> 功能
+
+绑定yaml文件中注入的值
+
+
+
+#### @Validated
+
+> 功能
+
+将其置于实体类上，可以进行属性的数据校验
 
 
 
