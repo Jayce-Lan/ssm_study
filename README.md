@@ -23,137 +23,109 @@
 
 
 
-> 导入必要的坐标依赖
+## Spring Boot
+
+### 创建springboot项目步骤
+
+#### 导入父工程依赖
+
+```xml
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.4.1</version>
+</parent>
+```
+
+#### 导入项目依赖
 
 ```xml
 <dependencies>
-  <dependency>
-    <groupId>junit</groupId>
-    <artifactId>junit</artifactId>
-    <version>4.11</version>
-    <scope>test</scope>
-  </dependency>
-
-  <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-  <dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <version>8.0.21</version>
-  </dependency>
-
-  <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
-  <dependency>
-    <groupId>org.aspectj</groupId>
-    <artifactId>aspectjweaver</artifactId>
-    <version>1.9.5</version>
-    <scope>runtime</scope>
-  </dependency>
-  <!-- https://mvnrepository.com/artifact/org.springframework/spring-aop -->
-  <dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-aop</artifactId>
-    <version>5.2.11.RELEASE</version>
-  </dependency>
-  <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
-  <dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-context</artifactId>
-    <version>5.2.11.RELEASE</version>
-  </dependency>
-  <!-- https://mvnrepository.com/artifact/org.springframework/spring-tx -->
-  <dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-tx</artifactId>
-    <version>5.2.11.RELEASE</version>
-  </dependency>
-  <!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
-  <dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-web</artifactId>
-    <version>5.2.11.RELEASE</version>
-  </dependency>
-  <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
-  <dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-webmvc</artifactId>
-    <version>5.2.11.RELEASE</version>
-  </dependency>
-  <!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
-  <dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-test</artifactId>
-    <version>5.2.11.RELEASE</version>
-    <scope>test</scope>
-  </dependency>
-  <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
-  <dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-jdbc</artifactId>
-    <version>5.2.11.RELEASE</version>
-  </dependency>
-
-  <!-- https://mvnrepository.com/artifact/com.mchange/c3p0 -->
-  <dependency>
-    <groupId>com.mchange</groupId>
-    <artifactId>c3p0</artifactId>
-    <version>0.9.5.2</version>
-  </dependency>
-    
-    <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
-  <dependency>
-    <groupId>org.mybatis</groupId>
-    <artifactId>mybatis-spring</artifactId>
-    <version>2.0.3</version>
-  </dependency>
-  <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
-  <dependency>
-    <groupId>javax.servlet</groupId>
-    <artifactId>javax.servlet-api</artifactId>
-    <version>4.0.1</version>
-    <scope>provided</scope>
-  </dependency>
-  <!-- https://mvnrepository.com/artifact/javax.servlet.jsp/javax.servlet.jsp-api -->
-  <dependency>
-    <groupId>javax.servlet.jsp</groupId>
-    <artifactId>javax.servlet.jsp-api</artifactId>
-    <version>2.3.1</version>
-    <scope>provided</scope>
-  </dependency>
-  <!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
-  <dependency>
-    <groupId>javax.servlet</groupId>
-    <artifactId>jstl</artifactId>
-    <version>1.2</version>
-  </dependency>
-  <!-- https://mvnrepository.com/artifact/log4j/log4j -->
-  <dependency>
-    <groupId>log4j</groupId>
-    <artifactId>log4j</artifactId>
-    <version>1.2.17</version>
-  </dependency>
-  <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
-  <dependency>
-    <groupId>org.slf4j</groupId>
-    <artifactId>slf4j-api</artifactId>
-    <version>2.0.0-alpha1</version>
-  </dependency>
-  <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
-  <dependency>
-    <groupId>org.slf4j</groupId>
-    <artifactId>slf4j-log4j12</artifactId>
-    <version>2.0.0-alpha1</version>
-    <scope>test</scope>
-  </dependency>
-  <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
-  <dependency>
-    <groupId>org.mybatis</groupId>
-    <artifactId>mybatis</artifactId>
-    <version>3.5.3</version>
-  </dependency>
-
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
 </dependencies>
 ```
 
 
 
-#### Spring 整合 SpringMVC 
+#### 编写主程序应用
+
+```java
+package com.learn.boot;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+//主程序类
+@SpringBootApplication      //告知springboot，这是一个springboot应用
+public class MainApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(MainApplication.class, args);    //运行主程序应用(固定写法)
+    }
+}
+```
+
+在此，我们只需要运行main方法就可以启动 tomcat
+
+
+
+### springboot的打包
+
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+        </plugin>
+    </plugins>
+</build>
+```
+
+在pom.xml中导入以上依赖，springboot会自动帮我们把项目打包为jar包
+
+
+
+### 快速生成springboot项目
+
+使用官网提供的工具生成压缩包：  https://start.spring.io/
+
+
+
+## springboot常用注解
+
+#### @RestController
+
+> 功能
+
+集合了 `@Controller` 与 `@ResponseBody`  的功能
+
+`@Controller` 声明web类
+`@ResponseBody` 注明这个类中的所有方法都是返回给浏览器的字符串，而不是返回到jsp
+
+> 实例
+
+```java
+import ...;
+
+@RestController
+public class HelloController {
+    @RequestMapping("hello")
+    public String hello() {
+        return "Hello, SpringBoot2!";
+    }
+}
+```
+
+
+
+## springboot_01_hello项目目录
+
+- src/main
+  - java/com/learn
+    - boot	【存放项目启动类】
+      - controller  【存放项目控制器】
+  - resource  【存放配置文件】
+    - `application.properties`  【springboot的配置文件，在springboot中，已经简化了配置，因此只需要配置该文件即可】
