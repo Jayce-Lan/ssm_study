@@ -1,4 +1,4 @@
-# SSM架构
+# SSM架构/SpringBoot
 
 
 
@@ -94,6 +94,84 @@ public class MainApplication {
 
 
 
+### springboot自动配置
+
+#### pom.xml
+
+- `spring-boot-starter-parent`  【核心依赖在父工程中】
+- 我们在写或者引入springboot依赖的时候不需要指定版本，因为springboot本身内置版本仓库
+
+
+
+#### 启动器
+
+```xml
+<dependencies>
+    <!--启动器-->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+</dependencies>
+```
+
+- 启动器就是springboot的启动场景
+- springboot会将所有的功能场景变成启动器
+- 如果需要使用对应版本，只需要启动对应的 `starter` 即可
+
+
+
+#### 主程序
+
+```java
+@SpringBootApplication	//标注这是一个springboot应用
+public class Springboot01HelloApplication {
+
+	public static void main(String[] args) {
+        //将springboot应用启动
+		SpringApplication.run(Springboot01HelloApplication.class, args);
+	}
+
+}
+```
+
+##### @SpringBootApplication
+
+>  它包含了以下注解
+
+- `@SpringBootConfiguration` 【springboot的配置】
+  - `@Configuration`  【spring的配置类】
+  - `@Component`  【说明这是spring的一个组件】
+- `@EnableAutoConfiguration`  【自动导入配置】
+  - `AutoConfigurationPackage`	【自动配置包】
+    - `@Import(AutoConfigurationPackage.Registrar.class)`   【导入选择器包注册】
+  - `@Import(AutoConfiguartionImportSelector.class)`  【自动导入选择】
+
+
+
+#### springboot自动加载
+
+> springboot所有自动配置都是在启动的时候扫描并加载
+
+spring-boot-test-autoconfigure-x.x.x.jar/META-INF/`spring.factories`
+
+- 要判断条件是否生效，就看是否装配了对应的启动器，如果装配（手动配置），那么才会启动成功
+- 所有自动配置类都在 *spring-boot-test-autoconfigure-x.x.x.jar* 这个包下
+- 它会把所有需要导入的组件以类名方式返回，这些组件就会被添加到容器中
+
+
+
+### SpringBoot理解
+
+- 自动装配
+- `run()` 方法
+  - 判断应用的类型是普通项目还是web项目
+  - 查找并加载所有可用初始化器，设置到 *initializers* 属性中
+  - 找出所有的应用程序监听器，设置到 *listeners* 属性中
+  - 推断并设置 *main* 方法的定义类，找到运行的主类
+
+
+
 ## springboot常用注解
 
 #### @RestController
@@ -129,3 +207,4 @@ public class HelloController {
       - controller  【存放项目控制器】
   - resource  【存放配置文件】
     - `application.properties`  【springboot的配置文件，在springboot中，已经简化了配置，因此只需要配置该文件即可】
+    - `banner.txt`  【用作自定义logo】
