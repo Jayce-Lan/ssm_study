@@ -4,22 +4,238 @@
 
 ## 搭建整合环境
 
-### 搭建整合环境
+Spring MVC 负责MVC设计模式， MyBatis 负责持久层，Spring 负责SpringMVC和mybatis的创建和依赖注入
 
-- SSM可以使用多种方式整合（这里使用的是 xml + 注解方式整合）
-- 整合思路
-  - 搭建整合环境
-  - 完成 spring 配置的搭建
-  - 使用 spring 整合 springMVC 框架
-  - 使用 spring 整合 mybatis 框架
+### 导入maven依赖
 
-### 创建 maven 工程
+```xml
+<dependencies>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.11</version>
+        <scope>compile</scope>
+    </dependency>
+    <!--SpringMVC-->
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-webmvc</artifactId>
+        <version>5.2.12.RELEASE</version>
+    </dependency>
+    <!--Spring JDBC-->
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-jdbc</artifactId>
+        <version>5.2.12.RELEASE</version>
+    </dependency>
+    <!--Spring AOP-->
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-aop -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aop</artifactId>
+        <version>5.2.12.RELEASE</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-aspects -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aspects</artifactId>
+        <version>5.2.12.RELEASE</version>
+    </dependency>
+</dependencies>
+```
 
-- 创建 ssm_parent 父工程【打包方式选择 pom，必要的操作】
-- 创建 ssm_web 子模块【打包方式 war 包】
-- 创建 ssm_service 子模块【打包方式为 jar 包】
-- 创建 ssm_dao 子模块【打包方式为 jar 包】
-- 创建 ssm_pojo 子模块【打包方式为 jar 包】
+
+
+### pom.xml中读取类路径下的xml
+
+```xml
+<!--配置读取mysql语句的xml文件-->
+<resources>
+    <resource>
+        <directory>src/main/java</directory>
+        <includes>
+            <include>**/*.xml</include>
+        </includes>
+    </resource>
+    <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+            <include>*.xml</include>
+            <include>*.properties</include>
+        </includes>
+    </resource>
+</resources>
+```
+
+
+
+### web.xml
+
+web.xml中需要配置spring MVC、Spring、字符编码过滤器、加载静态资源
+
+```xml
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+  <!--启动spring-->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:spring.xml</param-value>
+  </context-param>
+  <!--spring监听器-->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+  <!--SpringMVC-->
+  <servlet>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:springmvc.xml</param-value>
+    </init-param>
+  </servlet>
+
+  <!--拦截所有请求-->
+  <servlet-mapping>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <!--字符编码过滤器-->
+  <filter>
+    <filter-name>characterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>characterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!--加载静态资源-->
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.js</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.css</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.jpg</url-pattern>
+  </servlet-mapping>
+</web-app>
+```
+
+### 在spring.xml中配置mybatis和spring整合
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--整合mybatis-->
+    <bean id="dataSources" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="jdbcUrl" value="jdbc:mysql://localhost/ssm?useSSL=false&amp;serverTimezone=UTC"/>
+        <property name="user" value="root"/>
+        <property name="password" value="root"/>
+        <!--初始化连接对象-->
+        <property name="initialPoolSize" value="5"/>
+        <!--最大连接对象-->
+        <property name="maxPoolSize" value="10"/>
+    </bean>
+
+    <!--配置mybatis SqlSessionFactory-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSources"/>
+        <!--指定mapper位置-->
+        <property name="mapperLocations" value="classpath:com/learn/repository/*.xml"/>
+        <!--mybatis全局配置文件-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+
+    <!--扫描自定义的mapper接口-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.learn.repository"/>
+    </bean>
+
+</beans>
+```
+
+
+
+### mybatis-config.xml中的配置
+
+配置一些辅助信息
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!--打印SQL-->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+    <!--指定一个包，mybatis会在包下面搜索需要的javabean-->
+    <typeAliases>
+        <package name="com.learn.entity"/>
+    </typeAliases>
+</configuration>
+```
+
+
+
+### 配置springmvc.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--启动注解驱动-->
+    <mvc:annotation-driven/>
+
+    <!--扫描业务代码-->
+    <context:component-scan base-package="com.learn"/>
+
+    <!--配置视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+</beans>
+```
+
+
 
 
 
@@ -300,3 +516,48 @@ public class HelloController {
   - resource  【存放配置文件】
     - `application.properties`  【springboot的配置文件，在springboot中，已经简化了配置，因此只需要配置该文件即可】
     - `banner.txt`  【用作自定义logo】
+
+
+
+## SpringBoot web开发
+
+### springboot特点
+
+> 自动装配
+
+- `xxxAutoConfiguration`  向容器中自动装配组件
+- `xxxProperties`  自动配置类，装配文件中自定义的内容
+
+
+
+### springboot web需要解决的问题
+
+- 导入静态资源
+- 制作网站首页
+- jsp，导入模板引擎 *Thymeleaf* 
+- 装配扩展 SpringMVC 
+- 增删改查
+- 拦截器
+- 国际化
+
+
+
+### 静态资源
+
+> 处理静态资源的方式
+
+- webjars	
+  - `http://localhost:8080/webjars/需要访问的文件`
+
+- `classpath`目录下的*public*、*static*、*resources*、*/*** 目录下的文件都可以直接被接口所访问到
+  - `http://localhost:8080/在以上三个文件夹下的文件`
+
+> 优先级
+
+resources > static（默认使用） > public
+
+
+
+### 定制首页
+
+将首页命名为 index 随后将其放入classpath目录下，springboot会自动识别
