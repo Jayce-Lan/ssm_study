@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- ===============================IoC与DI======================================== -->
+    <!-- 创建一个bean实例 -->
+    <bean id="UserDao" class="com.ssm.ioc_di.dao.UserDaoImpl"/>
+
+    <!-- 添加已经注册好的实例 -->
+    <bean id="UserService" class="com.ssm.ioc_di.service.UserServiceImpl">
+        <!-- 使用UserService的setter去注入UserDao实例 -->
+        <property name="userDao" ref="UserDao"/>
+    </bean>
+
+    <!-- ===============================Bean的作用域======================================== -->
+    <!-- 配置实例对象
+         @scope 设置属性值
+                singleton 单例模式
+                prototype 多例模式
+     -->
+    <bean id="Scope" class="com.ssm.scope.Scope" scope="prototype"/>
+</beans>
