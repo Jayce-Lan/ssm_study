@@ -10,8 +10,10 @@
 
 *main/java*
 
+- com.ssm.annoAspectj【基于注解实现AOP切面】
+
 - com.ssm.annotation【基于注解装配bean】
-- com.ssm.aspectj【AOP配置】
+- com.ssm.aspectj【使用xml配置AOP切面】
 
 - com.ssm.assemble【bean容器注入的两种方式】
 - com.ssm.autoAssemble【不使用注解自动装配bena】
