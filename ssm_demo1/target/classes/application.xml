@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 通过有参构造方法来创建bean实例 -->
+    <bean id="user1" class="com.ssm.assemble.pojo.User">
+        <constructor-arg index="0" value="Tony"/>
+        <constructor-arg index="1" value="root"/>
+        <constructor-arg index="2">
+            <list>
+                <value>"constructor-arg1"</value>
+                <value>"constructor-arg2"</value>
+                <value>"constructor-arg3"</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!-- 通过无参构造方法以及setter方法构造bean依赖 -->
+    <bean id="user2" class="com.ssm.assemble.pojo.User">
+        <property name="userName" value="Jim"/>
+        <property name="password" value="root"/>
+        <property name="list">
+            <list>
+                <value>"property1"</value>
+                <value>"property2"</value>
+                <value>"property3"</value>
+
+            </list>
+        </property>
+    </bean>
+</beans>
