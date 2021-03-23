@@ -4,7 +4,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- 通过有参构造方法来创建bean实例 -->
+    <!--
+            通过有参构造方法来创建bean实例
+            其中的索引 index 用于说明参数的位置
+    -->
     <bean id="user1" class="com.ssm.assemble.pojo.User">
         <constructor-arg index="0" value="Tony"/>
         <constructor-arg index="1" value="root"/>
