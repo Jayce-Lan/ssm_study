@@ -11,6 +11,7 @@
 *main/java*
 
 - com.ssm.annotation【基于注解装配bean】
+- com.ssm.aspectj【AOP配置】
 
 - com.ssm.assemble【bean容器注入的两种方式】
 - com.ssm.autoAssemble【不使用注解自动装配bena】
