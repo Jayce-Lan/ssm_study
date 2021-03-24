@@ -9,6 +9,7 @@ import java.util.List;
 
 public class UserDaoImpl implements UserDao {
     private JdbcTemplate jdbcTemplate;
+    private Integer userCount;
 
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -34,6 +35,7 @@ public class UserDaoImpl implements UserDao {
     public int deleteUser(int id) {
         String sql = "delete from user where id = ?";
         int count = this.jdbcTemplate.update(sql, id);
+        this.userCount = count;
         return count;
     }
 
@@ -51,5 +53,18 @@ public class UserDaoImpl implements UserDao {
         RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
         List<User> userList = this.jdbcTemplate.query(sql, rowMapper);
         return userList;
+    }
+
+    @Override
+    public void transfer(int outUserId, int inUserId, Integer jf) {
+
+        this.jdbcTemplate.update("update user set jf = jf-? where id = ?", jf, outUserId);
+
+        //模拟异常
+        int i = 1 / 0;
+
+        this.jdbcTemplate.update("update user set jf = jf+? where id = ?", jf, inUserId);
+
+        System.out.println("积分赠送成功！");
     }
 }

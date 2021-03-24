@@ -4,6 +4,7 @@ public class User {
     private Integer id;
     private String username;
     private String password;
+    private Integer jf;
 
     @Override
     public String toString() {
@@ -11,7 +12,16 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", jf'" + jf + '\'' +
                 '}';
+    }
+
+    public Integer getJf() {
+        return jf;
+    }
+
+    public void setJf(Integer jf) {
+        this.jf = jf;
     }
 
     public Integer getId() {

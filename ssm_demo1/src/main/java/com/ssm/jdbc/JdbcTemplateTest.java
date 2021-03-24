@@ -2,6 +2,7 @@ package com.ssm.jdbc;
 
 import com.ssm.jdbc.dao.UserDao;
 import com.ssm.jdbc.pojo.User;
+import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,12 +10,17 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
 
 public class JdbcTemplateTest {
+
     public static void main(String[] args) {
         ApplicationContext context = new ClassPathXmlApplicationContext("jdbcxml/jdbcbean1.xml");
         JdbcTemplate jdbcTemplate = (JdbcTemplate) context.getBean("jdbcTemplate");
         UserDao userDao = (UserDao) context.getBean("userDao");
 
-        findUserById(userDao);
+        findAllUser(userDao);
+        System.out.println("=========================================");
+        transfer(userDao);
+        System.out.println("=========================================");
+        findAllUser(userDao);
     }
 
     public static void createTable(JdbcTemplate jdbcTemplate) {
@@ -62,5 +68,9 @@ public class JdbcTemplateTest {
         for (User user : userList) {
             System.out.println(user);
         }
+    }
+
+    public static void transfer(UserDao userDao) {
+        userDao.transfer(4, 5, 100);
     }
 }

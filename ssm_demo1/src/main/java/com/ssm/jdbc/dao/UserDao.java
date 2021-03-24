@@ -14,4 +14,6 @@ public interface UserDao {
     public User findUserById(int id);
 
     public List<User> findAllUser();
+
+    public void transfer(int outUserId, int inUserId, Integer jf);
 }
