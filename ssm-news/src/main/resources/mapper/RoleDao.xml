@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.dao.RoleDao">
+    <resultMap id="BaseResultMap" type="com.ssm.pojo.Role">
+        <id column="roleId" jdbcType="INTEGER" property="roleid" />
+        <result column="roleName" jdbcType="VARCHAR" property="rolename" />
+        <!-- 一对多 -->
+        <collection property="userList" ofType="user">
+            <id property="userid" column="userid"/>
+            <result property="username" column="username"/>
+            <result property="loginname" column="loginname"/>
+            <result property="password" column="password"/>
+            <result property="tel" column="tel"/>
+            <result property="registertime" column="registertime"/>
+            <result property="status" column="status"/>
+            <result property="roleid" column="roleid"/>
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+        roleId, roleName
+    </sql>
+    <sql id="All_List"></sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from role
+        where roleId = #{roleid,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from role
+        where roleId = #{roleid,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="roleId" keyProperty="roleid" parameterType="com.ssm.pojo.Role" useGeneratedKeys="true">
+        insert into role (roleName)
+        values (#{rolename,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="roleId" keyProperty="roleid" parameterType="com.ssm.pojo.Role" useGeneratedKeys="true">
+        insert into role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rolename != null">
+                roleName,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rolename != null">
+                #{rolename,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ssm.pojo.Role">
+        update role
+        <set>
+            <if test="rolename != null">
+                roleName = #{rolename,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where roleId = #{roleid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ssm.pojo.Role">
+        update role
+        set roleName = #{rolename,jdbcType=VARCHAR}
+        where roleId = #{roleid,jdbcType=INTEGER}
+    </update>
+    
+    <select id="findAll" resultMap="BaseResultMap">
+        select r.roleid rid, r.rolename, u.*
+        from role r
+        left outer join user u on u.roleid = r.roleid
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select r.roleid rid, r.rolename, u.*
+        from role r
+        left outer join user u on u.roleid = r.roleid
+        where r.roleid = #{roleid}
+    </select>
+</mapper>

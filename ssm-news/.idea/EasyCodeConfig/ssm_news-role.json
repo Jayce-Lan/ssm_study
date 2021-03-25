@@ -1,0 +1,26 @@
+{
+  "name" : "Role",
+  "preName" : "",
+  "comment" : "角色表",
+  "templateGroupName" : "Default",
+  "fullColumn" : [ {
+    "name" : "roleid",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "rolename",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  } ],
+  "pkColumn" : null,
+  "otherColumn" : null,
+  "savePackageName" : "com.ssm",
+  "savePath" : "./src/main/java/com/ssm",
+  "saveModelName" : "ssm-news"
+}
