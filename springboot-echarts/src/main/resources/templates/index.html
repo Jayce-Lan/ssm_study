@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello</title>
+    <script src="/node_modules/echarts/dist/echarts.js"></script>
+    <script src="/node_modules/jquery/dist/jquery.js"></script>
+    <style type="text/css">
+        #box {
+            border: 1px solid skyblue;
+            height: 500px;
+            width: 500px;
+            position: absolute;
+            margin: auto;
+            left: 0; right: 0; top: 0; bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+
+    </div>
+</body>
+</html>
+<script>
+    var mychart = echarts.init(document.getElementById("box"));
+    //等待
+    mychart.showLoading();
+
+    $.ajax({
+        type: "post",
+        url: "/user",
+        success: function (result) {
+            console.log(result);
+            names = [];
+            ages = [];
+            if (result.length >= 1) {
+                for (let i = 0; i < result.length; i++) {
+                    names.push(result[i].name);
+                    ages.push(result[i].age);
+                }
+                mychart.hideLoading();
+                mychart.setOption({
+                    xAxis: [{
+                        type: "category",
+                        boundaryGap: false,
+                        data: names
+                    }],
+                    yAxis: {
+                        type: "value"
+                    },
+                    series: [{
+                        "data": ages,
+                        type: 'line',
+                        areaStyle: {}
+                    }]
+                })
+            } else {
+                alert("数据获取失败！")
+            }
+        }
+    })
+</script>

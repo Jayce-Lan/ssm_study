@@ -16,8 +16,4 @@ public interface RoleDao {
     int updateByPrimaryKeySelective(Role record);
 
     int updateByPrimaryKey(Role record);
-
-    List<Role> findAll();
-
-    Role selectById(Integer roleid);
 }

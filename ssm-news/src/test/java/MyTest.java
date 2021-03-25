@@ -21,6 +21,8 @@ public class MyTest {
     @Test
     public void test() {
         User user = userDao.selectByPrimaryKey(1);
+        Role role = roleDao.selectByPrimaryKey(user.getRoleid());
+        user.setRoleName(role.getRolename());
         System.out.println(user);
     }
 
